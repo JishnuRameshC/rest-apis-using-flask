@@ -25,6 +25,7 @@ def create_store():
     stores.append(new_store)
     return new_store,201
 
+
 @app.post('/store/<string:name>/item')
 def create_item(name):
     request_data = request.get_json()
@@ -33,4 +34,18 @@ def create_item(name):
             new_item = {"name":request_data["name"],"price":request_data["price"]}
             store["items"].append(new_item)
             return new_item,201
+    return {"message":"store not found"}
+
+@app.get('/store/<string:name>/item')
+def show_items(name):
+    for store in stores:
+        if store["name"] == name:
+            return store["items"]
+    return {"message":"store not found"}
+
+@app.get('/store/<string:name>')
+def search_store(name):
+    for store in stores:
+        if store["name"] == name:
+            return store
     return {"message":"store not found"}
